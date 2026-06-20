@@ -46,4 +46,4 @@ export function getAverageEAR(
 }
 
 export const EAR_BLINK_THRESHOLD =
-  0.22;
+  0.29;
