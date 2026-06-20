@@ -1,0 +1,9 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyDYFPcIDfmVw2Gh0RjbZ1n0hJ_WAoGMNeQ",
+  authDomain: "smart-attendance-system-58c66.firebaseapp.com",
+  projectId: "smart-attendance-system-58c66",
+  storageBucket: "smart-attendance-system-58c66.firebasestorage.app",
+  messagingSenderId: "4035036770",
+  appId: "1:4035036770:web:337ec8f00413cc0b75333b",
+  measurementId: "G-VHLTK1FQ2E"
+};
