@@ -7,7 +7,7 @@ import { getDistance, MATCH_THRESHOLD } from "../utils/faceEngine";
 import { markAttendance } from "../utils/sheets";
 import LivenessCapture from "../components/LivenessCapture";
 
-const RADIUS_METERS = 30;
+const RADIUS_METERS = 50;
 
 export default function StudentAttendance() {
   const [stage, setStage] = useState("idle");
