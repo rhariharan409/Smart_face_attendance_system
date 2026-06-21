@@ -3,6 +3,7 @@ import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore"
 import { db } from "../firebase/config";
 import CameraCapture from "../components/CameraCapture";
 import { loadModels, getFaceDescriptor } from "../utils/faceEngine";
+import { regenerateDailyPIN, getTodayPIN } from "../utils/pin";
 
 
 export default function TeacherDashboard() {
@@ -12,6 +13,7 @@ export default function TeacherDashboard() {
   const [capturing, setCapturing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [modelsLoaded, setModelsLoaded] = useState(false);
+  const [pin, setPin] = useState(null);
 
   useEffect(() => {
     async function init() {
@@ -22,6 +24,9 @@ export default function TeacherDashboard() {
         setModelsLoaded(true);
 
         await loadStudents();
+        const data = await getTodayPIN();
+        setPin(data?.pin || null);
+
       } catch (err) {
         console.error("Model loading error:", err);
       }
@@ -29,6 +34,11 @@ export default function TeacherDashboard() {
 
     init();
   }, []);
+
+  async function handleRegeneratePIN() {
+    const newPin = await regenerateDailyPIN();
+    setPin(newPin);
+  }
 
   async function loadStudents() {
     const snap = await getDocs(collection(db, "students"));
@@ -64,7 +74,20 @@ export default function TeacherDashboard() {
   return (
     <div className="p-6 max-w-md mx-auto">
       <h1 className="text-2xl mb-4">Teacher Dashboard</h1>
+      <div className="mb-6 border p-4 rounded bg-yellow-50 text-center">
+        <h2 className="text-lg mb-2">Today's PIN</h2>
 
+        <p className="text-3xl font-bold tracking-widest">
+          {pin ?? "—"}
+        </p>
+
+        <button
+          onClick={handleRegeneratePIN}
+          className="bg-yellow-600 text-white px-4 py-2 rounded mt-2"
+        >
+          Regenerate PIN
+        </button>
+      </div>
       <div className="mb-6 border p-4 rounded">
         <h2 className="text-lg mb-2">Add Student</h2>
         <input
