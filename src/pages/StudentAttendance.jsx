@@ -7,7 +7,7 @@ import { getDistance, MATCH_THRESHOLD } from "../utils/faceEngine";
 import { markAttendance } from "../utils/sheets";
 import LivenessCapture from "../components/LivenessCapture";
 
-const RADIUS_METERS = 50;
+const RADIUS_METERS = 150;
 
 export default function StudentAttendance() {
   const [stage, setStage] = useState("idle");
@@ -15,6 +15,7 @@ export default function StudentAttendance() {
   const [enteredPin, setEnteredPin] = useState("");
   const [claimedStudent, setClaimedStudent] = useState(null);
   const [message, setMessage] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
 
   async function handleStart() {
     setStage("checking-location");
@@ -104,9 +105,9 @@ export default function StudentAttendance() {
 
   if (distance >= MATCH_THRESHOLD) {
     setMessage(
-      `Face doesn't match the enrolled photo for ${email}. Please try again.`
+      `Face doesn't match. Please try again.`
     );
-    setStage("error");
+    setRetryCount(retryCount + 1);
     return;
   }
 
@@ -129,9 +130,9 @@ export default function StudentAttendance() {
 
   function handleTimeout() {
     setMessage(
-      "No blink detected in time. Please try again."
+      "No blink detected. Please try again."
     );
-    setStage("error");
+    setRetryCount(retryCount + 1);
   }
 
   function reset() {
@@ -140,6 +141,7 @@ export default function StudentAttendance() {
     setEnteredPin("");
     setClaimedStudent(null);
     setMessage("");
+    setRetryCount(0);
   }
 
   return (
@@ -198,10 +200,18 @@ export default function StudentAttendance() {
       )}
 
       {stage === "verifying" && (
-        <LivenessCapture
-          onVerified={handleVerified}
-          onTimeout={handleTimeout}
-        />
+        <div>
+          {message && (
+            <p className="text-orange-600 mb-4 font-medium">
+              {message}
+            </p>
+          )}
+          <LivenessCapture
+            key={retryCount}
+            onVerified={handleVerified}
+            onTimeout={handleTimeout}
+          />
+        </div>
       )}
 
       {stage === "success" && (
