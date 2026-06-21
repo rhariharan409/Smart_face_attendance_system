@@ -93,24 +93,24 @@ export default function StudentAttendance() {
 
     setStage("verifying");
   }
-
   async function handleVerified(descriptor) {
-    const storedDescriptor =
-      new Float32Array(claimedStudent.faceDescriptor);
+  const storedDescriptor =
+    new Float32Array(claimedStudent.faceDescriptor);
 
-    const distance = getDistance(
-      descriptor,
-      storedDescriptor
+  const distance = getDistance(
+    descriptor,
+    storedDescriptor
+  );
+
+  if (distance >= MATCH_THRESHOLD) {
+    setMessage(
+      `Face doesn't match the enrolled photo for ${email}. Please try again.`
     );
+    setStage("error");
+    return;
+  }
 
-    if (distance >= MATCH_THRESHOLD) {
-      setMessage(
-        `Face doesn't match the enrolled photo for ${email}. Please try again.`
-      );
-      setStage("error");
-      return;
-    }
-
+  try {
     await markAttendance(
       claimedStudent.name,
       claimedStudent.email
@@ -121,7 +121,11 @@ export default function StudentAttendance() {
     );
 
     setStage("success");
+  } catch (err) {
+    setMessage(err.message);
+    setStage("error");
   }
+}
 
   function handleTimeout() {
     setMessage(
