@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LivenessTest from "./pages/LivenessTest";
 
 import Home from "./pages/Home";
 import TeacherDashboard from "./pages/TeacherDashboard";
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/teacher" element={<TeacherDashboard />} />
         <Route path="/student" element={<StudentAttendance />} />
         <Route path="/facetest" element={<FaceTest />} />
+        <Route path="/livenesstest"element={<LivenessTest />} />
       </Routes>
     </BrowserRouter>
   );
