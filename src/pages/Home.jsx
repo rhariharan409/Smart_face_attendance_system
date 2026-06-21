@@ -28,26 +28,26 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-100 px-4">
-      <div className="w-full max-w-md rounded-3xl border border-slate-700 bg-slate-900/90 p-8 shadow-2xl shadow-slate-900/40">
-        <h1 className="text-3xl font-semibold text-center mb-6">
-          Smart Attendance
-        </h1>
-        <p className="text-sm text-slate-400 text-center mb-8">
-          Select your role to continue.
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            Smart Attendance
+          </h1>
+          <p className="text-gray-500">Choose your role</p>
+        </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           <button
             onClick={goStudent}
-            className="w-full rounded-2xl bg-gradient-to-r from-cyan-500 to-sky-600 px-5 py-4 text-lg font-semibold text-white shadow-lg shadow-cyan-500/20 transition hover:scale-[1.01]"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition"
           >
             Student
           </button>
 
           <button
             onClick={goTeacher}
-            className="w-full rounded-2xl border border-slate-600 bg-slate-800 px-5 py-4 text-lg font-semibold text-slate-100 shadow-lg shadow-slate-900/30 transition hover:border-slate-400 hover:bg-slate-700"
+            className="w-full bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-4 rounded-lg transition"
           >
             Teacher
           </button>
