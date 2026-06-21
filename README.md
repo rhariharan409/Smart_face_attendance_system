@@ -1,16 +1,52 @@
-# React + Vite
+# Smart Attendance System Using Facial Recognition
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Problem Statement
 
-Currently, two official plugins are available:
+Traditional attendance marking is time-consuming and prone to proxy attendance.
+This project verifies student identity via facial recognition, blocks photo/video
+spoofing through liveness detection, restricts marking to within 30 meters of the
+classroom, and requires a daily-rotating PIN — before logging attendance automatically
+to Google Sheets.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
 
-## React Compiler
+- Frontend: React + Vite (PWA)
+- Face detection, landmarks, recognition: face-api.js (TensorFlow.js)
+- Liveness detection: custom Eye Aspect Ratio (EAR) blink detection
+- Database: Firebase Firestore
+- Geofencing: Haversine formula via browser Geolocation API
+- Attendance log: Google Sheets via Apps Script
+- Hosting: Vercel
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## How It Works
 
-## Expanding the ESLint configuration
+1. **Teacher Dashboard** — enroll students (name, email, live face capture),
+   regenerate the daily PIN.
+2. **Student Attendance** — checks location (within 30m), then email + PIN,
+   then live face verification with blink-based liveness, then writes to
+   Google Sheets only if every check passes.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Setup
+
+1. Clone the repo, run `npm install`
+2. Add your Firebase config to `src/firebase/config.js`
+3. Add your Apps Script deployment URL to `src/utils/sheets.js`
+4. Place face-api.js model files in `public/models`
+5. `npm run dev`
+
+## Known Limitations
+
+- No authentication distinguishing teacher vs. student access — anyone with
+  the app URL can reach the teacher dashboard. Firestore rules validate data
+  shape but not requester identity.
+- Liveness detection (blink check) can be defeated by a video replay of a
+  real blink, since it's a known limitation of single-camera RGB-only
+  liveness systems without depth sensing or randomized challenges.
+- Indoor GPS accuracy (commonly 10-50m) can occasionally cause false
+  rejections near the radius boundary.
+
+## Team
+
+- [Suhail Akthar S M] — Computer vision engine (face detection, matching, liveness)
+- [Hariharan R] — Frontend, camera UI, PWA
+- [Devendiran K] — Backend, Firebase, geolocation, PIN system, Sheets integration
